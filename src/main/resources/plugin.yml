@@ -1,0 +1,17 @@
+name: Hazestore
+version: '${version}'
+main: com.kala.hazestore.Hazestore
+api-version: '1.21'
+depend: [MMOItems, CoinsEngine]
+commands:
+  hs:
+    description: "Main command for Hazestore"
+    permission: "hs.open"
+    usage: "/hs [open|admin]"
+permissions:
+  hs.open:
+    description: "Allows opening the Hazestore GUI"
+    default: true
+  hs.admin:
+    description: "Allows reloading and forcing rotation"
+    default: op
