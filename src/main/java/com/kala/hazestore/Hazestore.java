@@ -7,6 +7,8 @@ import com.kala.hazestore.config.LogManager;
 import com.kala.hazestore.gui.HazestoreGUI;
 import com.kala.hazestore.manager.ItemPoolManager;
 import com.kala.hazestore.task.RotationTask;
+import com.kala.hazestore.util.MaterialHelper;
+import com.kala.hazestore.util.ServerVersion;
 import org.bukkit.plugin.java.JavaPlugin;
 
 // made with ❤️ by haze
@@ -18,6 +20,9 @@ public class Hazestore extends JavaPlugin {
     private LogManager logManager;
     private ItemPoolManager itemPoolManager;
     private HazestoreGUI guiManager;
+    private boolean mmoItemsEnabled;
+    private boolean coinsEngineEnabled;
+    private boolean placeholderApiEnabled;
 
     @Override
     public void onEnable() {
@@ -32,14 +37,28 @@ public class Hazestore extends JavaPlugin {
             "</gold>"
         ));
 
-        if (getServer().getPluginManager().getPlugin("MMOItems") == null) {
-            getLogger().severe("MMOItems not found! Disabling plugin.");
+        MaterialHelper.init(getLogger());
+        ServerVersion detectedVersion = ServerVersion.getCurrent();
+        getLogger().info("[HazeStore] Detected server version: 1." + detectedVersion.getMinor() + " - Compatibility: OK");
+
+        if (!detectedVersion.isSupported()) {
+            getLogger().severe("[HazeStore/Compat] Unsupported server version! HazeStore requires Minecraft 1.19 or newer.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        if (getServer().getPluginManager().getPlugin("CoinsEngine") == null && getServer().getPluginManager().getPlugin("ExcellentEconomy") == null) {
-            getLogger().warning("CoinsEngine or ExcellentEconomy not found! Transactions might fail if no compatible economy is present.");
+        this.mmoItemsEnabled = getServer().getPluginManager().getPlugin("MMOItems") != null;
+        this.coinsEngineEnabled = getServer().getPluginManager().getPlugin("CoinsEngine") != null || getServer().getPluginManager().getPlugin("ExcellentEconomy") != null;
+        this.placeholderApiEnabled = getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
+
+        if (!mmoItemsEnabled) {
+            getLogger().warning("[HazeStore/Compat] MMOItems not found! MMOItems shop items will be disabled.");
+        }
+        if (!coinsEngineEnabled) {
+            getLogger().warning("[HazeStore/Compat] CoinsEngine or ExcellentEconomy not found! Transactions might fail.");
+        }
+        if (!placeholderApiEnabled) {
+            getLogger().warning("[HazeStore/Compat] PlaceholderAPI not found! Placeholder support disabled.");
         }
 
         this.configManager = new ConfigManager(this);
@@ -57,7 +76,7 @@ public class Hazestore extends JavaPlugin {
 
         new RotationTask(this).runTaskTimer(this, 20L, 20L);
 
-        getLogger().info("Hazestore enabled successfully!");
+        getLogger().info("HazeStore enabled successfully!");
     }
 
     @Override
@@ -68,7 +87,7 @@ public class Hazestore extends JavaPlugin {
         if (guiManager != null) {
             guiManager.closeAll();
         }
-        getLogger().info("Hazestore disabled!");
+        getLogger().info("HazeStore disabled!");
     }
 
     public ConfigManager getConfigManager() { return configManager; }
@@ -76,4 +95,7 @@ public class Hazestore extends JavaPlugin {
     public LogManager getLogManager() { return logManager; }
     public ItemPoolManager getItemPoolManager() { return itemPoolManager; }
     public HazestoreGUI getGuiManager() { return guiManager; }
+    public boolean isMmoItemsEnabled() { return mmoItemsEnabled; }
+    public boolean isCoinsEngineEnabled() { return coinsEngineEnabled; }
+    public boolean isPlaceholderApiEnabled() { return placeholderApiEnabled; }
 }

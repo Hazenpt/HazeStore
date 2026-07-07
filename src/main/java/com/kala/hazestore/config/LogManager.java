@@ -1,7 +1,5 @@
 package com.kala.hazestore.config;
 
-// made with ❤️ by haze
-
 import com.kala.hazestore.Hazestore;
 import org.bukkit.entity.Player;
 
@@ -11,6 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+// made with ❤️ by haze
 
 public class LogManager {
     private final Hazestore plugin;

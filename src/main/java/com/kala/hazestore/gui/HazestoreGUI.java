@@ -2,6 +2,7 @@ package com.kala.hazestore.gui;
 
 import com.kala.hazestore.Hazestore;
 import com.kala.hazestore.model.StoreItem;
+import com.kala.hazestore.util.MaterialHelper;
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.Type;
 import net.kyori.adventure.text.Component;
@@ -84,8 +85,8 @@ public class HazestoreGUI implements Listener {
                     continue;
                 }
             } else if ("vanilla".equalsIgnoreCase(sItem.type())) {
-                Material mat = Material.matchMaterial(sItem.material());
-                if (mat == null) {
+                Material mat = MaterialHelper.getMaterial(sItem.material());
+                if (mat == Material.BARRIER && !sItem.material().equalsIgnoreCase("barrier")) {
                     plugin.getLogger().warning("Invalid vanilla material: " + sItem.material());
                     cachedItems.add(null);
                     continue;
@@ -142,8 +143,7 @@ public class HazestoreGUI implements Listener {
     }
 
     private ItemStack buildFiller() {
-        Material fillerMaterial = Material.matchMaterial(plugin.getConfigManager().getFillerMaterial());
-        if (fillerMaterial == null) fillerMaterial = Material.BLACK_STAINED_GLASS_PANE;
+        Material fillerMaterial = MaterialHelper.getMaterial(plugin.getConfigManager().getFillerMaterial());
 
         ItemStack glass = new ItemStack(fillerMaterial);
         ItemMeta meta = glass.getItemMeta();
@@ -260,8 +260,8 @@ public class HazestoreGUI implements Listener {
                 return;
             }
         } else if ("vanilla".equalsIgnoreCase(sItem.type())) {
-            Material mat = Material.matchMaterial(sItem.material());
-            if (mat == null) {
+            Material mat = MaterialHelper.getMaterial(sItem.material());
+            if (mat == Material.BARRIER && !sItem.material().equalsIgnoreCase("barrier")) {
                 player.sendMessage(mm.deserialize(plugin.getConfigManager().getPrefix() + "<red>Could not give the item. Invalid material.</red>"));
                 return;
             }
@@ -291,7 +291,7 @@ public class HazestoreGUI implements Listener {
     }
 
     private double getBalanceViaPlaceholder(Player player, String placeholder) {
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return -1;
+        if (!plugin.isPlaceholderApiEnabled()) return -1;
         try {
             String rawPlaceholder = placeholder.replace("%coinsengine_balance_", "%coinsengine_balance_raw_");
             String raw = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, rawPlaceholder);
@@ -312,10 +312,11 @@ public class HazestoreGUI implements Listener {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), takeCommand);
 
         player.getInventory().addItem(mmoItem);
+        String itemName = "mmoitems".equalsIgnoreCase(sItem.type()) ? sItem.mmoItemId() : sItem.material();
         String msg = plugin.getConfigManager().getMessage("purchased")
                 .replace("{currency}", currencyId)
                 .replace("{price}", String.valueOf(price))
-                .replace("{item}", sItem.mmoItemId());
+                .replace("{item}", itemName);
         player.sendMessage(mm.deserialize(msg));
 
         try {
@@ -325,7 +326,7 @@ public class HazestoreGUI implements Listener {
             plugin.getLogger().warning("Invalid purchase sound in config.");
         }
 
-        plugin.getLogManager().logPurchase(player, sItem.mmoItemId(), price);
+        plugin.getLogManager().logPurchase(player, itemName, price);
         player.closeInventory();
     }
 

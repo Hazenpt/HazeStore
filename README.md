@@ -2,10 +2,27 @@
 
 A Minecraft plugin featuring a rotating store powered by Haze, with GUI, weighted item pool, purchase logging, and full MiniMessage support. Supports both MMOItems and vanilla items, with CoinsEngine and PlaceholderAPI integration.
 
+## Compatibility
+
+- **Minecraft Versions**: 1.19 - 1.21.x+ (single JAR compatible with all versions)
+- **Server Software**: Paper (uses native Paper Adventure API for MiniMessage)
+- **Java Version**: 17+
+- **Soft Dependencies**: MMOItems, CoinsEngine, PlaceholderAPI are all optional - missing dependencies only disable their respective features
+
+## Features
+
+- Rotating mystery store with weighted item pool
+- Full GUI with MiniMessage formatting support
+- Purchase logging
+- Support for both MMOItems and vanilla items
+- Automatic material fallback system for renamed/removed materials
+- Graceful handling of missing soft dependencies
+
 ## Dependencies
+
 - MMOItems (optional, for custom items)
-- CoinsEngine
-- PlaceholderAPI
+- CoinsEngine (or ExcellentEconomy, optional, for economy support)
+- PlaceholderAPI (optional, for placeholder support)
 
 ## Commands
 

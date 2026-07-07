@@ -2,6 +2,7 @@ package com.kala.hazestore.config;
 
 import com.kala.hazestore.Hazestore;
 import com.kala.hazestore.model.StoreItem;
+import com.kala.hazestore.util.MaterialHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -61,7 +62,7 @@ public class ConfigManager {
         plugin.reloadConfig();
         config = plugin.getConfig();
 
-        prefix = config.getString("prefix", "<gray>[<gold>Hazestore</gold>]</gray> ");
+        prefix = config.getString("prefix", "<gray>[<gold>HazeStore</gold>]</gray> ");
         rotationMillis = parseRotationString(config.getString("rotation", "1d 0h 0m"));
         currency = config.getString("currency", "gold");
 
@@ -136,7 +137,9 @@ public class ConfigManager {
             int weight = itemSec.getInt("weight", 10);
 
             if ("mmoitems".equalsIgnoreCase(itemType) && mmoType != null && mmoId != null) {
-                pool.add(new StoreItem(key, itemType, mmoType, mmoId, null, 1, price, weight));
+                if (plugin.isMmoItemsEnabled()) {
+                    pool.add(new StoreItem(key, itemType, mmoType, mmoId, null, 1, price, weight));
+                }
             } else if ("vanilla".equalsIgnoreCase(itemType) && material != null) {
                 pool.add(new StoreItem(key, itemType, null, null, material, amount, price, weight));
             }

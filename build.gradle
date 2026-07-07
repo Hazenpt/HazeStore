@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.kala'
-version = '1.0.2'
+version = '1.0.1'
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.Indyuce:MMOItems-API:6.10.1-SNAPSHOT")
     compileOnly("io.lumine:MythicLib-dist:1.7.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
@@ -44,7 +44,7 @@ tasks {
     }
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
