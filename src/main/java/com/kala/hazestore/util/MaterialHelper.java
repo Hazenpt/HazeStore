@@ -33,20 +33,20 @@ public class MaterialHelper {
 
     public static Material getMaterial(String materialName) {
         if (materialName == null || materialName.isBlank()) {
-            logger.warning("[HazeStore/Compat] Invalid material name: null/empty");
+            logger.warning("[HazeStore] Invalid material name: null/empty");
             return DEFAULT_MATERIAL;
         }
 
         String checkName = materialName.toUpperCase();
         String fallback = FALLBACKS.get(checkName);
         if (fallback != null) {
-            logger.info("[HazeStore/Compat] Applying material fallback: " + checkName + " -> " + fallback);
+            logger.info("[HazeStore] Applying material fallback: " + checkName + " -> " + fallback);
             checkName = fallback;
         }
 
         Material material = Material.matchMaterial(checkName);
         if (material == null) {
-            logger.warning("[HazeStore/Compat] Material not found: " + materialName + " (checked fallback: " + (fallback != null ? fallback : "none") + ") - using " + DEFAULT_MATERIAL + " as fallback");
+            logger.warning("[HazeStore] Material not found: " + materialName + " (checked fallback: " + (fallback != null ? fallback : "none") + ") - using " + DEFAULT_MATERIAL + " as fallback");
             return DEFAULT_MATERIAL;
         }
         return material;

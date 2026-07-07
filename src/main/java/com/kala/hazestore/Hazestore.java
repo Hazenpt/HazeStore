@@ -42,7 +42,7 @@ public class Hazestore extends JavaPlugin {
         getLogger().info("[HazeStore] Detected server version: 1." + detectedVersion.getMinor() + " - Compatibility: OK");
 
         if (!detectedVersion.isSupported()) {
-            getLogger().severe("[HazeStore/Compat] Unsupported server version! HazeStore requires Minecraft 1.19 or newer.");
+            getLogger().severe("[HazeStore] Unsupported server version! HazeStore requires Minecraft 1.19 or newer.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -52,13 +52,13 @@ public class Hazestore extends JavaPlugin {
         this.placeholderApiEnabled = getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
 
         if (!mmoItemsEnabled) {
-            getLogger().warning("[HazeStore/Compat] MMOItems not found! MMOItems shop items will be disabled.");
+            getLogger().warning("[HazeStore] MMOItems not found! MMOItems shop items will be disabled.");
         }
         if (!coinsEngineEnabled) {
-            getLogger().warning("[HazeStore/Compat] CoinsEngine or ExcellentEconomy not found! Transactions might fail.");
+            getLogger().warning("[HazeStore] CoinsEngine or ExcellentEconomy not found! Transactions might fail.");
         }
         if (!placeholderApiEnabled) {
-            getLogger().warning("[HazeStore/Compat] PlaceholderAPI not found! Placeholder support disabled.");
+            getLogger().warning("[HazeStore] PlaceholderAPI not found! Placeholder support disabled.");
         }
 
         this.configManager = new ConfigManager(this);
