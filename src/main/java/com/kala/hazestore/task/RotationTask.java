@@ -1,9 +1,10 @@
+// made with ❤️ by haze
+// made with ❤️ by haze
+// made with ❤️ by haze
 package com.kala.hazestore.task;
 
 import com.kala.hazestore.Hazestore;
 import org.bukkit.scheduler.BukkitRunnable;
-
-// made with ❤️ by haze
 
 public class RotationTask extends BukkitRunnable {
     private final Hazestore plugin;

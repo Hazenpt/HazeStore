@@ -1,8 +1,9 @@
+// made with ❤️ by haze
+// made with ❤️ by haze
+// made with ❤️ by haze
 package com.kala.hazestore.config;
 
 import com.kala.hazestore.Hazestore;
-import com.kala.hazestore.model.StoreItem;
-import com.kala.hazestore.util.MaterialHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -11,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// made with ❤️ by haze
-
 public class ConfigManager {
     private final Hazestore plugin;
     private FileConfiguration config;
@@ -20,13 +19,28 @@ public class ConfigManager {
     private String prefix;
     private long rotationMillis;
     private String currency;
+    private boolean broadcastEnabled;
+    private boolean broadcastRotation;
+    private boolean broadcastWarnings;
+    private String defaultPool;
 
-    private String guiTitle;
-    private List<Integer> guiSlots;
-    private String fillerMaterial;
-    private String fillerName;
-    private String guiLorePrice;
-    private String guiLorePurchaseHint;
+    private String hiddenItemMaterial;
+    private String hiddenItemTexture;
+    private String hiddenItemOwner;
+    private String hiddenItemName;
+    private List<String> hiddenItemLore;
+
+    private String vipItemMaterial;
+    private String vipItemTexture;
+    private String vipItemOwner;
+    private String vipItemName;
+    private List<String> vipItemLore;
+
+    private String soldOutMaterial;
+    private String soldOutTexture;
+    private String soldOutOwner;
+    private String soldOutName;
+    private List<String> soldOutLore;
 
     private final Map<String, String> messages = new HashMap<>();
     private final Map<Integer, String> warnings = new HashMap<>();
@@ -43,20 +57,20 @@ public class ConfigManager {
     private float forceRotateSoundVolume;
     private float forceRotateSoundPitch;
 
-    private final List<StoreItem> pool = new ArrayList<>();
+    private String revealSound;
+    private float revealSoundVolume;
+    private float revealSoundPitch;
 
     public ConfigManager(Hazestore plugin) {
         this.plugin = plugin;
         load();
     }
 
-
     public boolean load() {
         java.io.File configFile = new java.io.File(plugin.getDataFolder(), "config.yml");
         boolean regenerated = false;
         if (!configFile.exists()) {
             plugin.saveDefaultConfig();
-            plugin.getLogger().warning("Config file was missing! A new default config.yml has been generated.");
             regenerated = true;
         }
         plugin.reloadConfig();
@@ -65,22 +79,34 @@ public class ConfigManager {
         prefix = config.getString("prefix", "<gray>[<gold>HazeStore</gold>]</gray> ");
         rotationMillis = parseRotationString(config.getString("rotation", "1d 0h 0m"));
         currency = config.getString("currency", "gold");
-
-        guiTitle = config.getString("gui.title", "<dark_gray>The Mysterious Man</dark_gray>");
-        guiSlots = config.getIntegerList("gui.slots");
-        if (guiSlots.isEmpty()) {
-            guiSlots = List.of(21, 22, 23);
-        }
-
-        fillerMaterial = config.getString("gui.filler.material", "BLACK_STAINED_GLASS_PANE");
-        fillerName = config.getString("gui.filler.name", " ");
-        guiLorePrice = config.getString("gui.lore.price", "<gold>Price: </gold><yellow>{price} {currency}</yellow>");
-        guiLorePurchaseHint = config.getString("gui.lore.purchase-hint", "<gray>Click to <green>purchase</green>!</gray>");
-
+        defaultPool = config.getString("default-pool", "default");
+        broadcastEnabled = config.getBoolean("broadcast.enabled", true);
+        broadcastRotation = config.getBoolean("broadcast.rotation", true);
+        broadcastWarnings = config.getBoolean("broadcast.warnings", true);
+        loadHiddenAndSoldOut();
         loadMessagesAndWarnings();
         loadSounds();
-        loadPool();
         return regenerated;
+    }
+
+    private void loadHiddenAndSoldOut() {
+        hiddenItemMaterial = config.getString("hidden-item.material", config.getString("hidden-item-material", "BARRIER"));
+        hiddenItemTexture = config.getString("hidden-item.texture", "");
+        hiddenItemOwner = config.getString("hidden-item.owner", "");
+        hiddenItemName = config.getString("hidden-item.name", config.getString("hidden-item-name", "<gray>Item segreto</gray>"));
+        hiddenItemLore = config.getStringList("hidden-item.lore");
+
+        vipItemMaterial = config.getString("vip-item.material", "BARRIER");
+        vipItemTexture = config.getString("vip-item.texture", "");
+        vipItemOwner = config.getString("vip-item.owner", "");
+        vipItemName = config.getString("vip-item.name", "<gold>VIP item</gold>");
+        vipItemLore = config.getStringList("vip-item.lore");
+
+        soldOutMaterial = config.getString("sold-out-item.material", "BARRIER");
+        soldOutTexture = config.getString("sold-out-item.texture", "");
+        soldOutOwner = config.getString("sold-out-item.owner", "");
+        soldOutName = config.getString("sold-out-item.name", "<red>Esaurito</red>");
+        soldOutLore = config.getStringList("sold-out-item.lore");
     }
 
     private void loadMessagesAndWarnings() {
@@ -117,33 +143,10 @@ public class ConfigManager {
         forceRotateSound = config.getString("sounds.force-rotate.sound", "BLOCK_NOTE_BLOCK_PLING");
         forceRotateSoundVolume = (float) config.getDouble("sounds.force-rotate.volume", 1.0);
         forceRotateSoundPitch = (float) config.getDouble("sounds.force-rotate.pitch", 1.0);
-    }
 
-    private void loadPool() {
-        pool.clear();
-        ConfigurationSection poolSection = config.getConfigurationSection("pool");
-        if (poolSection == null) return;
-
-        for (String key : poolSection.getKeys(false)) {
-            ConfigurationSection itemSec = poolSection.getConfigurationSection(key);
-            if (itemSec == null) continue;
-
-            String itemType = itemSec.getString("type", "mmoitems");
-            String mmoType = itemSec.getString("mmoitems_type");
-            String mmoId = itemSec.getString("mmoitems_id");
-            String material = itemSec.getString("material");
-            int amount = itemSec.getInt("amount", 1);
-            double price = itemSec.getDouble("price", 0);
-            int weight = itemSec.getInt("weight", 10);
-
-            if ("mmoitems".equalsIgnoreCase(itemType) && mmoType != null && mmoId != null) {
-                if (plugin.isMmoItemsEnabled()) {
-                    pool.add(new StoreItem(key, itemType, mmoType, mmoId, null, 1, price, weight));
-                }
-            } else if ("vanilla".equalsIgnoreCase(itemType) && material != null) {
-                pool.add(new StoreItem(key, itemType, null, null, material, amount, price, weight));
-            }
-        }
+        revealSound = config.getString("sounds.hidden-reveal.sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
+        revealSoundVolume = (float) config.getDouble("sounds.hidden-reveal.volume", 1.0);
+        revealSoundPitch = (float) config.getDouble("sounds.hidden-reveal.pitch", 1.2);
     }
 
     private long parseRotationString(String input) {
@@ -166,13 +169,27 @@ public class ConfigManager {
     public String getPrefix() { return prefix; }
     public long getRotationMillis() { return rotationMillis; }
     public String getCurrency() { return currency; }
-    
-    public String getGuiTitle() { return guiTitle; }
-    public List<Integer> getGuiSlots() { return guiSlots; }
-    public String getFillerMaterial() { return fillerMaterial; }
-    public String getFillerName() { return fillerName; }
-    public String getGuiLorePrice() { return guiLorePrice; }
-    public String getGuiLorePurchaseHint() { return guiLorePurchaseHint; }
+    public String getDefaultPool() { return defaultPool; }
+    public boolean isBroadcastEnabled() { return broadcastEnabled; }
+    public boolean isBroadcastRotation() { return broadcastRotation; }
+    public boolean isBroadcastWarnings() { return broadcastWarnings; }
+    public String getHiddenItemMaterial() { return hiddenItemMaterial; }
+    public String getHiddenItemTexture() { return hiddenItemTexture; }
+    public String getHiddenItemOwner() { return hiddenItemOwner; }
+    public String getHiddenItemName() { return hiddenItemName; }
+    public List<String> getHiddenItemLore() { return hiddenItemLore; }
+
+    public String getVipItemMaterial() { return vipItemMaterial; }
+    public String getVipItemTexture() { return vipItemTexture; }
+    public String getVipItemOwner() { return vipItemOwner; }
+    public String getVipItemName() { return vipItemName; }
+    public List<String> getVipItemLore() { return vipItemLore; }
+
+    public String getSoldOutMaterial() { return soldOutMaterial; }
+    public String getSoldOutTexture() { return soldOutTexture; }
+    public String getSoldOutOwner() { return soldOutOwner; }
+    public String getSoldOutName() { return soldOutName; }
+    public List<String> getSoldOutLore() { return soldOutLore; }
     
     public Map<Integer, String> getWarnings() { return warnings; }
     
@@ -187,6 +204,8 @@ public class ConfigManager {
     public String getForceRotateSound() { return forceRotateSound; }
     public float getForceRotateSoundVolume() { return forceRotateSoundVolume; }
     public float getForceRotateSoundPitch() { return forceRotateSoundPitch; }
-    
-    public List<StoreItem> getPool() { return pool; }
+
+    public String getRevealSound() { return revealSound; }
+    public float getRevealSoundVolume() { return revealSoundVolume; }
+    public float getRevealSoundPitch() { return revealSoundPitch; }
 }

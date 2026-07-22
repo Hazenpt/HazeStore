@@ -1,3 +1,6 @@
+// made with ❤️ by haze
+// made with ❤️ by haze
+// made with ❤️ by haze
 package com.kala.hazestore.util;
 
 import org.bukkit.Material;
@@ -5,8 +8,6 @@ import org.bukkit.Material;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-
-// made with ❤️ by haze
 
 public class MaterialHelper {
 
@@ -19,12 +20,7 @@ public class MaterialHelper {
         FALLBACKS.put("MUD_BRICK_STAIRS", "PACKED_MUD_BRICK_STAIRS");
         FALLBACKS.put("MUD_BRICK_WALL", "PACKED_MUD_BRICK_WALL");
         FALLBACKS.put("MUD_BRICKS", "PACKED_MUD_BRICKS");
-        FALLBACKS.put("POTTED_MANGROVE_PROPAGULE", "POTTED_MANGROVE_PROPAGULE");
         FALLBACKS.put("SHORT_GRASS", "GRASS");
-        FALLBACKS.put("SCULK_VEIN", "SCULK_VEIN");
-        FALLBACKS.put("OCHRE_FROGLIGHT", "OCHRE_FROGLIGHT");
-        FALLBACKS.put("VERDANT_FROGLIGHT", "VERDANT_FROGLIGHT");
-        FALLBACKS.put("PEARLESCENT_FROGLIGHT", "PEARLESCENT_FROGLIGHT");
     }
 
     public static void init(Logger pluginLogger) {

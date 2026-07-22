@@ -12,6 +12,9 @@ permissions:
   hs.open:
     description: "Allows opening the HazeStore GUI"
     default: true
+  hs.vip:
+    description: "Allows seeing and buying VIP items"
+    default: op
   hs.admin:
-    description: "Allows reloading and forcing rotation"
+    description: "Allows the editor, reload, force rotation and bypassing hidden/VIP masking"
     default: op

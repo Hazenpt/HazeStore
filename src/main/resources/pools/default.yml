@@ -1,0 +1,65 @@
+items:
+  item1:
+    type: "vanilla"
+    material: "DIAMOND"
+    display-name: "<aqua>Diamond Pack</aqua>"
+    amount: 16
+    price: 500
+    weight: 50
+    vip: false
+    hidden: false
+    max-purchases: -1
+  item2:
+    type: "vanilla"
+    material: "GOLDEN_APPLE"
+    amount: 1
+    price: 250
+    weight: 20
+    vip: true
+    hidden: false
+    max-purchases: 5
+  item3:
+    type: "vanilla"
+    material: "EMERALD"
+    amount: 32
+    price: 100
+    weight: 100
+    vip: false
+    hidden: false
+    max-purchases: -1
+  item4:
+    type: "vanilla"
+    material: "NETHERITE_INGOT"
+    amount: 1
+    price: 1500
+    weight: 10
+    vip: false
+    hidden: true
+    max-purchases: -1
+  # Example for ItemsAdder (requires ItemsAdder installed)
+  # To use it, uncomment and update the id with your own
+  # item5:
+  #   type: "itemsadder"
+  #   itemsadder-id: "example:my_custom_item"
+  #   amount: 1
+  #   price: 300
+  #   weight: 30
+  #   vip: false
+  #   hidden: false
+  #   max-purchases: -1
+
+  # Example for MMOItems (requires MMOItems installed)
+  # To use it, uncomment and set mmoitems_type + mmoitems_id to a real item
+  # item6:
+  #   type: "mmoitems"
+  #   mmoitems_type: "SWORD"
+  #   mmoitems_id: "CUTLASS"
+  #   display-name: "<gold>Cutlass"
+  #   amount: 1
+  #   price: 750
+  #   weight: 15
+  #   vip: false
+  #   hidden: true
+  #   max-purchases: 1
+
+

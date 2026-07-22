@@ -1,11 +1,12 @@
+// made with ❤️ by haze
+// made with ❤️ by haze
+// made with ❤️ by haze
 package com.kala.hazestore.util;
 
 import org.bukkit.Bukkit;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-// made with ❤️ by haze
 
 public enum ServerVersion {
 

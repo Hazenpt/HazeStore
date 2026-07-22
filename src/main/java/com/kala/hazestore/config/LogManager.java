@@ -1,3 +1,6 @@
+// made with ❤️ by haze
+// made with ❤️ by haze
+// made with ❤️ by haze
 package com.kala.hazestore.config;
 
 import com.kala.hazestore.Hazestore;
@@ -9,8 +12,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-// made with ❤️ by haze
 
 public class LogManager {
     private final Hazestore plugin;
