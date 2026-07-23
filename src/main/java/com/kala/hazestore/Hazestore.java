@@ -43,13 +43,13 @@ public class Hazestore extends JavaPlugin {
 
         MaterialHelper.init(getLogger());
         ServerVersion detectedVersion = ServerVersion.getCurrent();
-        getLogger().info("[HazeStore] Detected server version: 1." + detectedVersion.getMinor() + " - Compatibility: OK");
 
         if (!detectedVersion.isSupported()) {
-            getLogger().severe("[HazeStore] Unsupported server version! HazeStore requires Minecraft 1.19 or newer.");
+            getLogger().severe("[HazeStore] Unsupported server version (" + detectedVersion.getDisplayVersion() + ")! HazeStore requires Minecraft 1.19 or newer.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        getLogger().info("[HazeStore] Detected server version: " + detectedVersion.getDisplayVersion() + " - Compatibility: OK");
 
         this.mmoItemsEnabled = getServer().getPluginManager().getPlugin("MMOItems") != null;
         this.coinsEngineEnabled = getServer().getPluginManager().getPlugin("CoinsEngine") != null || getServer().getPluginManager().getPlugin("ExcellentEconomy") != null;

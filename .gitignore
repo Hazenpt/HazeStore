@@ -39,3 +39,5 @@ Desktop.ini
 # Gradle wrapper (optional: comment out if you want to keep it)
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
+
+*.txt
